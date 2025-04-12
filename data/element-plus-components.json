@@ -1,0 +1,342 @@
+[
+  {
+    "name": "ElButton",
+    "description": "按钮组件，用于触发用户操作",
+    "category": "基础组件",
+    "props": [
+      {
+        "name": "size",
+        "type": "string",
+        "description": "按钮大小",
+        "default": "default",
+        "required": false
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "description": "按钮类型",
+        "default": "default",
+        "required": false
+      },
+      {
+        "name": "plain",
+        "type": "boolean",
+        "description": "是否朴素按钮",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "round",
+        "type": "boolean",
+        "description": "是否圆角按钮",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用状态",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "click",
+        "description": "点击按钮时触发",
+        "params": [
+          {
+            "name": "event",
+            "type": "MouseEvent",
+            "description": "原生事件对象"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "按钮内容"
+      },
+      {
+        "name": "loading",
+        "description": "自定义加载图标内容"
+      },
+      {
+        "name": "icon",
+        "description": "自定义图标"
+      }
+    ]
+  },
+  {
+    "name": "ElTable",
+    "description": "表格组件，用于展示多条结构类似的数据",
+    "category": "数据展示",
+    "props": [
+      {
+        "name": "data",
+        "type": "array",
+        "description": "表格数据",
+        "required": true
+      },
+      {
+        "name": "height",
+        "type": "string/number",
+        "description": "表格高度",
+        "required": false
+      },
+      {
+        "name": "border",
+        "type": "boolean",
+        "description": "是否带有纵向边框",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "stripe",
+        "type": "boolean",
+        "description": "是否斑马纹表格",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "select",
+        "description": "当用户手动勾选数据行时触发",
+        "params": [
+          {
+            "name": "selection",
+            "type": "array",
+            "description": "当前选中的所有数据"
+          },
+          {
+            "name": "row",
+            "type": "object",
+            "description": "当前选中的行数据"
+          }
+        ]
+      },
+      {
+        "name": "sort-change",
+        "description": "当表格的排序条件发生变化时触发",
+        "params": [
+          {
+            "name": "column",
+            "type": "object",
+            "description": "当前列的配置对象"
+          },
+          {
+            "name": "prop",
+            "type": "string",
+            "description": "当前列的字段名"
+          },
+          {
+            "name": "order",
+            "type": "string",
+            "description": "排序规则"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ElForm",
+    "description": "表单组件，用于收集、验证和提交用户输入的数据",
+    "category": "数据录入",
+    "props": [
+      {
+        "name": "model",
+        "type": "object",
+        "description": "表单数据对象",
+        "required": true
+      },
+      {
+        "name": "rules",
+        "type": "object",
+        "description": "表单验证规则",
+        "required": false
+      },
+      {
+        "name": "inline",
+        "type": "boolean",
+        "description": "是否行内表单",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "label-position",
+        "type": "string",
+        "description": "表单域标签的位置",
+        "default": "right",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "validate",
+        "description": "任一表单项被校验后触发",
+        "params": [
+          {
+            "name": "prop",
+            "type": "string",
+            "description": "被校验的表单项名称"
+          },
+          {
+            "name": "valid",
+            "type": "boolean",
+            "description": "校验是否通过"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "description": "校验错误信息"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "表单项内容"
+      }
+    ]
+  },
+  {
+    "name": "ElUpload",
+    "description": "上传组件，用于文件上传",
+    "category": "数据录入",
+    "props": [
+      {
+        "name": "action",
+        "type": "string",
+        "description": "上传的URL",
+        "required": true
+      },
+      {
+        "name": "headers",
+        "type": "object",
+        "description": "设置上传的请求头部",
+        "required": false
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "description": "是否支持多选文件",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "accept",
+        "type": "string",
+        "description": "接受上传的文件类型",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "success",
+        "description": "文件上传成功时触发",
+        "params": [
+          {
+            "name": "response",
+            "type": "any",
+            "description": "服务端响应内容"
+          },
+          {
+            "name": "file",
+            "type": "object",
+            "description": "上传成功的文件"
+          },
+          {
+            "name": "fileList",
+            "type": "array",
+            "description": "全部文件列表"
+          }
+        ]
+      },
+      {
+        "name": "error",
+        "description": "文件上传失败时触发",
+        "params": [
+          {
+            "name": "error",
+            "type": "Error",
+            "description": "错误对象"
+          },
+          {
+            "name": "file",
+            "type": "object",
+            "description": "上传失败的文件"
+          },
+          {
+            "name": "fileList",
+            "type": "array",
+            "description": "全部文件列表"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ElSelect",
+    "description": "下拉选择组件",
+    "category": "数据录入",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "any",
+        "description": "选中项绑定值",
+        "required": true
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "description": "是否多选",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "description": "是否可以清空选项",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "description": "选中值发生变化时触发",
+        "params": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "目前的选中值"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "Option组件列表"
+      },
+      {
+        "name": "prefix",
+        "description": "Select 组件头部内容"
+      },
+      {
+        "name": "empty",
+        "description": "无选项时的列表"
+      }
+    ]
+  }
+]

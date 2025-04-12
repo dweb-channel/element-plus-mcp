@@ -1,4 +1,4 @@
-import { callLLM } from './llmService';
+import { callLLM, LLMConfig } from './llmService';
 import { buildPrompt } from '../utils/promptBuilder';
 
 interface LLMComponentResponse {
@@ -7,9 +7,15 @@ interface LLMComponentResponse {
   code: string;
 }
 
-export async function generateComponent(userPrompt: string) {
+/**
+ * 生成组件
+ * @param userPrompt 用户提示
+ * @param llmConfig 大模型配置(可选)
+ * @returns 返回组件信息、原因和代码
+ */
+export async function generateComponent(userPrompt: string, llmConfig?: Partial<LLMConfig>) {
   const prompt = buildPrompt(userPrompt);
-  const response = await callLLM(prompt);
+  const response = await callLLM(prompt, llmConfig);
 
   try {
     // 处理可能的 Markdown 代码块格式

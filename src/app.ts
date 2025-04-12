@@ -2,6 +2,7 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import Router from 'koa-router';
 import mcpRoutes from './routers/mcp';
+import mcpProtocolRoutes from './routers/mcpProtocol';
 
 export function createServer() {
   const app = new Koa();
@@ -21,7 +22,11 @@ export function createServer() {
     }
   });
 
+  // 注册MCP API路由
   router.use('/api/mcp', mcpRoutes.routes(), mcpRoutes.allowedMethods());
+  
+  // 注册MCP协议路由
+  router.use('/api/mcp-protocol', mcpProtocolRoutes.routes(), mcpProtocolRoutes.allowedMethods());
 
   app.use(router.routes()).use(router.allowedMethods());
 
