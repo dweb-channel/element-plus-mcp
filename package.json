@@ -1,0 +1,30 @@
+{
+  "name": "element-plus-mcp",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "dotenv": "^16",
+    "koa": "^2",
+    "koa-bodyparser": "^4",
+    "koa-router": "^12"
+  },
+  "devDependencies": {
+    "@babel/parser": "^7",
+    "@babel/traverse": "^7",
+    "@types/koa": "^2",
+    "@types/koa-router": "^7",
+    "@types/node": "^22.14.1",
+    "@types/supertest": "^6.0.3",
+    "@vitest/ui": "^3.1.1",
+    "supertest": "^7.1.0",
+    "ts-node-dev": "^2",
+    "tsx": "^4.19.3",
+    "typescript": "^5",
+    "vitest": "^3.1.1"
+  }
+}

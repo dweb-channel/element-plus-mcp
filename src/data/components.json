@@ -1,0 +1,14 @@
+[
+    {
+      "name": "ElButton",
+      "description": "用于触发操作的按钮"
+    },
+    {
+      "name": "ElUpload",
+      "description": "用于上传文件的组件，支持拖拽上传和预览"
+    },
+    {
+      "name": "ElInput",
+      "description": "用于输入文本"
+    }
+  ]
