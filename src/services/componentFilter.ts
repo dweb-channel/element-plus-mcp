@@ -14,13 +14,13 @@ interface LLMComponentResponse {
  * @returns 返回组件信息、原因和代码
  */
 export async function generateComponent(userPrompt: string, llmConfig?: Partial<LLMConfig>) {
+
   const prompt = buildPrompt(userPrompt);
   const response = await callLLM(prompt, llmConfig);
 
   try {
     // 处理可能的 Markdown 代码块格式
     let jsonStr = response;
-    
     // 检查是否包含 Markdown 代码块
     const markdownMatch = response.match(/```(?:json)?\n([\s\S]+?)\n```/);
     if (markdownMatch && markdownMatch[1]) {

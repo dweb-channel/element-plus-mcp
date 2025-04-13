@@ -18,6 +18,7 @@
     "@babel/parser": "^7",
     "@babel/traverse": "^7",
     "@types/koa": "^2",
+    "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-router": "^7",
     "@types/node": "^22.14.1",
     "@types/supertest": "^6.0.3",

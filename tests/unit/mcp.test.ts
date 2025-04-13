@@ -2,10 +2,14 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createServer } from '../../src/app';
 
+import dotenv from 'dotenv';
+
+// 确保环境变量被加载
+dotenv.config();
+const app = createServer().callback();
+
 describe('MCP API', () => {
   it('should call generate-component tool and return valid response', async () => {
-    const app = createServer().callback();
-    
     const response = await request(app)
       .post('/api/mcp-protocol/mcp')
       .send({
@@ -22,7 +26,6 @@ describe('MCP API', () => {
         },
         id: 1
       });
-    
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('result');
     expect(response.body.result).toHaveProperty('content');
@@ -35,5 +38,5 @@ describe('MCP API', () => {
     expect(parsed).toHaveProperty('code');
     expect(parsed).toHaveProperty('previewUrl');
     expect(parsed).toHaveProperty('explanation');
-  });
-},300000);
+  },300000);
+});

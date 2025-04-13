@@ -10,7 +10,7 @@ export class PreviewService {
   public async buildPreview(code: string): Promise<string> {
     const id = this.generateId();
     this.storeCode(id, code);
-    return `/preview/${id}`;
+    return `http://localhost:3000/api/preview/get/${id}`;
   }
 
   private generateId(): string {

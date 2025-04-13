@@ -25,7 +25,7 @@ export function createServer() {
 
   // 注册MCP API路由
   router.use("/api/mcp", mcpRoutes.routes(), mcpRoutes.allowedMethods());
-  // 注册预览协议
+  // 注册预览路由
   router.use("/api/preview", previewRoutes.routes(), previewRoutes.allowedMethods());
   // 注册MCP协议路由
   router.use(

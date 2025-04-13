@@ -5,13 +5,13 @@ import { PreviewService } from "../services/previewService";
 const router = new Router();
 const previewService = new PreviewService();
 
-router.get("/preview/:id", async (ctx: Context) => {
+router.get("/get/:id", async (ctx: Context) => {
   const { id } = ctx.params;
   const code = previewService.getCodeById(id);
 
   if (!code) {
     ctx.status = 404;
-    ctx.body = "Preview not found";
+    ctx.body = `id: ${id} Preview not found`;
     return;
   }
 

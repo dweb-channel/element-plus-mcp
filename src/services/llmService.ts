@@ -30,7 +30,6 @@ const defaultLLMConfig: LLMConfig = {
 export async function callLLM(prompt: string, config?: Partial<LLMConfig>): Promise<string> {
   // 合并默认配置和用户提供的配置
   const finalConfig: LLMConfig = { ...defaultLLMConfig, ...config };
-  
   // 根据不同的模型类型构建不同的请求
   switch (finalConfig.modelType) {
     case 'deepseek':
