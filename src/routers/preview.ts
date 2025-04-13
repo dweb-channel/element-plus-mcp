@@ -3,7 +3,7 @@ import type { Context } from "koa";
 import { PreviewService } from "../services/previewService";
 
 const router = new Router();
-const previewService = PreviewService.instance
+const previewService = PreviewService.instance;
 
 router.get("/get/:id", async (ctx: Context) => {
   const { id } = ctx.params;
@@ -25,13 +25,13 @@ router.get("/get/:id", async (ctx: Context) => {
  */
 router.get("/sandbox", async (ctx: Context) => {
   const { id } = ctx.query;
-  
-  if (!id || typeof id !== 'string') {
+
+  if (!id || typeof id !== "string") {
     ctx.status = 400;
-    ctx.body = '缺少预览ID参数';
+    ctx.body = "缺少预览ID参数";
     return;
   }
-  
+
   ctx.type = "html";
   ctx.body = buildSandboxHtml(id);
 });
@@ -43,11 +43,11 @@ router.get("/sandbox", async (ctx: Context) => {
  */
 export function buildHtml(code: string): string {
   // 将组件代码进行 base64 编码以便存储和传输
-  const encodedComponent = Buffer.from(code).toString('base64');
-  
+  const encodedComponent = Buffer.from(code).toString("base64");
+
   // 生成页面 ID
   const previewId = `preview-${Date.now()}`;
-  
+
   // 创建一个包含 iframe 的页面
   return `
 <!DOCTYPE html>
@@ -164,64 +164,59 @@ export function buildSandboxHtml(previewId: string): string {
   <script type="module">
     import { createApp, defineComponent, ref, reactive, computed, watch, onMounted } from 'vue';
     import ElementPlus from 'element-plus';
-    import * as ElementPlusIconsVue from 'https://unpkg.com/@element-plus/icons-vue';
-    
-    // 从 localStorage 获取组件代码
+
     const encodedComponent = localStorage.getItem('${previewId}');
     if (!encodedComponent) {
       document.body.innerHTML = '<h3>组件预览已过期或不存在</h3>';
     } else {
-      // 解码组件代码
       const componentCode = atob(encodedComponent);
+
+      const templateMatch = componentCode.match(/<template>([\\s\\S]*?)<\\/template>/i);
+      const scriptMatch = componentCode.match(/<script[^>]*>([\\s\\S]*?)<\\/script>/i);
+
+      const template = templateMatch ? templateMatch[1].trim() : '';
+      let scriptContent = scriptMatch ? scriptMatch[1].trim() : '';
+
+      // 提取所有import语句并处理它们
+      const allImportRegex = /import\\s+(?:{\\s*[^}]*\\s*}\\s*from\\s*)?['"][^'"]+['"];?/g;
       
-      // 解析组件
-      let template = '';
-      let script = '';
+      // 特别处理Element Plus图标导入，提取组件名称以便注册
+      const iconImportRegex = /import\\s*{\\s*([^}]+)\\s*}\\s*from\\s*['"]@element-plus\\/icons-vue['"]/;
+      const iconMatch = scriptContent.match(iconImportRegex);
+      const iconNames = iconMatch?.[1]?.split(',').map(s => s.trim()) ?? [];
+
+      // 移除所有import语句
+      scriptContent = scriptContent.replace(allImportRegex, '').trim();
       
-      // 解析 template 部分
-      const templateMatch = componentCode.match(/<template>([\s\S]*?)<\/template>/i);
-      if (templateMatch && templateMatch[1]) {
-        template = templateMatch[1].trim();
-      } else {
-        // 如果没有template标签，将整个代码作为模板
-        template = componentCode;
+      // 确保脚本内容不包含任何模块语法
+      let setupFn = () => ({});
+      try {
+        // 添加console以便调试
+        setupFn = new Function('ref', 'reactive', 'computed', 'watch', 'onMounted', 
+          'try { ' + scriptContent + ' } catch(e) { console.error("Script execution error:", e); throw e; }');
+      } catch (err) {
+        console.error("Function creation error:", err);
+        throw err;
       }
-      
-      // 解析 script 部分
-      const scriptMatch = componentCode.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
-      if (scriptMatch && scriptMatch[1]) {
-        script = scriptMatch[1].trim();
-      }
-      
-      // 创建iframe高度调整函数
+
+      const Component = defineComponent({
+        setup() {
+          return setupFn(ref, reactive, computed, watch, onMounted);
+        },
+        template
+      });
+
+      const app = createApp(Component);
+      app.use(ElementPlus);
+      app.mount('#app');
+
+      // Resize
       function updateIframeHeight() {
         const height = document.body.scrollHeight;
         window.parent.postMessage({ type: 'iframe-height', height }, '*');
       }
-      
-      // 当DOM变化时更新iframe高度
       const observer = new MutationObserver(updateIframeHeight);
-      observer.observe(document.body, { 
-        attributes: true, 
-        childList: true, 
-        subtree: true 
-      });
-      
-      // 创建应用
-      const app = createApp(Component);
-      
-      // 注册 Element Plus
-      app.use(ElementPlus);
-      
-      // 注册所有 Element Plus 图标
-      for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-        app.component(key, component);
-      }
-      
-      // 挂载应用
-      app.mount('#app');
-      
-      // 页面加载完成后更新iframe高度
+      observer.observe(document.body, { childList: true, subtree: true });
       window.onload = updateIframeHeight;
     }
   </script>
