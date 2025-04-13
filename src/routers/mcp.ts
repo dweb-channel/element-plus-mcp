@@ -2,7 +2,7 @@ import Router from 'koa-router';
 import type { ParameterizedContext } from 'koa';
 import { generateComponent } from '../services/componentFilter';
 import { fixCode } from '../services/codeFixer';
-import { buildPreview } from '../services/previewService';
+import { PreviewService } from '../services/previewService';
 import { LLMConfig, LLMModelType } from '../services/llmService';
 
 const router = new Router();
@@ -42,7 +42,8 @@ router.post('/generate', async (ctx: ParameterizedContext) => {
     // 使用传入的大模型配置(如果有)调用generateComponent
     const { component, reason, rawCode } = await generateComponent(userPrompt, llmConfig);
     const fixedCode = fixCode(rawCode);
-    const previewUrl = await buildPreview(fixedCode);
+    const previewService = new PreviewService();
+    const previewUrl = await previewService.buildPreview(fixedCode);
 
     ctx.body = {
       component,

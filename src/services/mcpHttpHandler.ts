@@ -15,8 +15,8 @@ export class MCPHttpHandler {
     'Access-Control-Max-Age': '86400'
   };
 
-  constructor() {
-    this.server = createMCPServer();
+  constructor(server?: McpServer) {
+    this.server = server || createMCPServer();
   }
 
   /**

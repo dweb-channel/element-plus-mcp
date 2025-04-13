@@ -2,13 +2,46 @@ import Router from 'koa-router';
 import type { ParameterizedContext } from 'koa';
 import { MCPAdapter } from '../services/mcpAdapter';
 import { createMCPServer, createSSETransport } from '../services/mcpService';
+import { MCPHttpHandler } from '../services/mcpHttpHandler';
 import { LLMConfig } from '../services/llmService';
 
 // 创建MCP服务器实例
 const mcpServer = createMCPServer();
 const mcpAdapter = new MCPAdapter();
 
+// 创建HTTP处理器
+const mcpHttpHandler = new MCPHttpHandler(mcpServer);
+
 const router = new Router();
+
+/**
+ * MCP 主端点
+ * 用于处理所有 JSON-RPC 请求
+ */
+router.post('/mcp', async (ctx: ParameterizedContext) => {
+  try {
+    // 使用 MCPHttpHandler 处理请求
+    await mcpHttpHandler.handleRequest(ctx.req, ctx.res);
+    // 由于 MCPHttpHandler 会直接向 ctx.res 写入响应，所以不需要设置 ctx.body
+    // 标记为已处理，避免 Koa 尝试再次处理响应
+    ctx.respond = false;
+  } catch (error) {
+    console.error('MCP 请求处理错误:', error);
+    // 如果 MCPHttpHandler 尚未发送响应，则由 Koa 处理错误响应
+    if (!ctx.res.writableEnded) {
+      ctx.status = 500;
+      ctx.body = {
+        jsonrpc: "2.0",
+        error: {
+          code: -32603,
+          message: 'Internal error',
+          data: error instanceof Error ? error.message : String(error)
+        },
+        id: null
+      };
+    }
+  }
+});
 
 /**
  * MCP SSE端点

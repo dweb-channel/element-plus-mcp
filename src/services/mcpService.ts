@@ -7,6 +7,9 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import path from "path";
 import fs from "fs";
 import { ServerResponse } from "http";
+import { generateComponent } from "./componentFilter";
+import { fixCode } from "./codeFixer";
+import { PreviewService } from "./previewService";
 
 /**
  * 初始化MCP服务器
@@ -252,8 +255,6 @@ function registerComponentGenerationTool(server: McpServer) {
       featuresRequired,
     }) => {
       try {
-        // 这里应该调用你的generateComponent服务
-        // 但为了实现MCP接口，我们需要创建中间层适配器
 
         // 创建提示信息
         let prompt = description;
@@ -271,24 +272,24 @@ function registerComponentGenerationTool(server: McpServer) {
           prompt += `\n所需功能: ${featuresRequired.join(", ")}`;
         }
 
-        // 调用你原有的组件生成服务
-        // 这里需要引入你项目中的generateComponent函数
-        // 由于这是一个适配器，我们将在实际集成时处理
+        // 调用组件生成服务
+        const { component, reason, rawCode } = await generateComponent(prompt);
+        const fixedCode = fixCode(rawCode);
+        const previewService = new PreviewService();
+        const previewUrl = await previewService.buildPreview(fixedCode);
 
-        // 使用模拟数据演示结构
-        // 按照MCP SDK要求，工具的返回类型应该是 { content: [...] }
-        const component = {
-          componentName: "ExampleComponent",
-          code: "<template>\n  <div>示例组件</div>\n</template>",
-          previewUrl: "http://localhost:3000/preview",
-          explanation: "这是一个示例组件的说明",
+        const result = {
+          componentName: component,
+          code: fixedCode,
+          previewUrl,
+          explanation: reason,
         };
 
         return {
           content: [
             {
               type: "text",
-              text: JSON.stringify(component, null, 2),
+              text: JSON.stringify(result, null, 2),
             },
           ],
         };

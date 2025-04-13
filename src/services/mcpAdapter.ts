@@ -1,7 +1,7 @@
 import { LLMConfig } from './llmService';
 import { generateComponent } from './componentFilter';
 import { fixCode } from './codeFixer';
-import { buildPreview } from './previewService';
+import { PreviewService } from './previewService';
 
 /**
  * MCP适配器 - 连接MCP协议与现有组件生成服务
@@ -47,7 +47,8 @@ export class MCPAdapter {
       const fixedCode = fixCode(rawCode);
       
       // 构建预览
-      const previewUrl = await buildPreview(fixedCode);
+      const previewService = new PreviewService();
+      const previewUrl = await previewService.buildPreview(fixedCode);
       
       // 返回符合MCP响应格式的数据
       return {
