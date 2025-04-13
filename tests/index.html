@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Component Preview</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+        "element-plus": "https://unpkg.com/element-plus/dist/index.full.mjs"
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/@element-plus/icons-vue"></script>
+  <script type="module">
+    import { createApp, defineComponent, ref } from 'vue';
+    import ElementPlus from 'element-plus';
+
+    const App = defineComponent({
+      components: {
+        [Search.name]: Search
+      },
+      setup() {
+        const searchText = ref('');
+        const handleSearch = () => {
+          console.log('搜索:', searchText.value);
+        };
+        return { searchText, handleSearch };
+      },
+      template: `
+        <div>
+          <el-input
+            v-model="searchText"
+            placeholder="请输入搜索内容"
+            clearable
+            @input="handleSearch"
+          >
+            <template #prefix>
+              <el-icon><Search /></el-icon>
+            </template>
+          </el-input>
+        </div>
+      `
+    });
+
+    createApp(App).use(ElementPlus).mount('#app');
+  </script>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>

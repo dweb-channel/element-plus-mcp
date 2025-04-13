@@ -1,5 +1,4 @@
 import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
 
 export function fixVueCode(code: string): string {
   try {

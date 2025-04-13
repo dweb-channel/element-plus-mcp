@@ -256,8 +256,7 @@ export class MCPHttpHandler {
       const prompt = promptParts.join("，");
       const { component, reason, rawCode } = await generateComponent(prompt);
       const fixedCode = fixCode(rawCode);
-      const previewService = new PreviewService();
-      const previewUrl = await previewService.buildPreview(fixedCode);
+      const previewUrl = await PreviewService.instance.buildPreview(fixedCode);
       console.log("previewUrl=>", previewUrl);
       return {
         content: [

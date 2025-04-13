@@ -47,8 +47,7 @@ export class MCPAdapter {
       const fixedCode = fixCode(rawCode);
       
       // 构建预览
-      const previewService = new PreviewService();
-      const previewUrl = await previewService.buildPreview(fixedCode);
+      const previewUrl = await PreviewService.instance.buildPreview(fixedCode);
       
       // 返回符合MCP响应格式的数据
       return {

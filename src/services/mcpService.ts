@@ -275,8 +275,7 @@ function registerComponentGenerationTool(server: McpServer) {
         // 调用组件生成服务
         const { component, reason, rawCode } = await generateComponent(prompt);
         const fixedCode = fixCode(rawCode);
-        const previewService = new PreviewService();
-        const previewUrl = await previewService.buildPreview(fixedCode);
+        const previewUrl = await  PreviewService.instance.buildPreview(fixedCode);
 
         const result = {
           componentName: component,
