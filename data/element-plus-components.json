@@ -338,5 +338,58 @@
         "description": "无选项时的列表"
       }
     ]
+  },
+  {
+    "name": "ElTable",
+    "description": "表格组件，用于展示多条结构类似的数据",
+    "category": "数据展示",
+    "props": [
+      {
+        "name": "data",
+        "type": "array",
+        "description": "显示的数据",
+        "required": true
+      },
+      {
+        "name": "stripe",
+        "type": "boolean",
+        "description": "是否为斑马纹表格",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "border",
+        "type": "boolean",
+        "description": "是否带有纵向边框",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "size",
+        "type": "string",
+        "description": "表格大小",
+        "default": "large",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "selection-change",
+        "description": "当选择项发生变化时触发",
+        "params": [
+          {
+            "name": "selection",
+            "type": "array",
+            "description": "已选择的行数据"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "表格列的定义"
+      }
+    ]
   }
 ]

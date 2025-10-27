@@ -1,6 +1,7 @@
 import components from '../data/components.json';
+import fullComponents from '../../data/element-plus-components.json';
 
-export function buildPrompt(userPrompt: string, componentMeta = components): string {
+export function buildPrompt(userPrompt: string, componentMeta = fullComponents): string {
   return `
   用户需求：${userPrompt}
 

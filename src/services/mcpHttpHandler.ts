@@ -123,15 +123,28 @@ export class MCPHttpHandler {
     // 根据方法名分派请求
     let result;
     switch (request.method) {
+      case "initialize":
+        result = await this.handleInitialize(request.params);
+        break;
+      case "tools/list":
+        result = await this.handleListTools(request.params);
+        break;
+      case "resources/list":
       case "mcp/listResources":
         result = await this.handleListResources(request.params);
         break;
+      case "resources/read":
       case "mcp/readResource":
         result = await this.handleReadResource(request.params);
         break;
+      case "tools/call":
       case "mcp/callTool":
         result = await this.handleCallTool(request.params);
         break;
+      case "prompts/list":
+        result = await this.handleListPrompts(request.params);
+        break;
+      case "prompts/get":
       case "mcp/getPrompt":
         result = await this.handleGetPrompt(request.params);
         break;
@@ -146,6 +159,82 @@ export class MCPHttpHandler {
       jsonrpc: "2.0",
       result,
       id: request.id,
+    };
+  }
+
+  /**
+   * 处理 initialize 请求（MCP 握手）
+   */
+  private async handleInitialize(params: any): Promise<any> {
+    return {
+      protocolVersion: "2024-11-05",
+      capabilities: {
+        tools: {},
+        resources: {},
+        prompts: {},
+      },
+      serverInfo: {
+        name: "element-plus-mcp",
+        version: "1.0.0",
+      },
+    };
+  }
+
+  /**
+   * 处理 tools/list 请求
+   */
+  private async handleListTools(params: any): Promise<any> {
+    return {
+      tools: [
+        {
+          name: "generate-component",
+          description: "根据描述生成 Element Plus 组件代码",
+          inputSchema: {
+            type: "object",
+            properties: {
+              description: {
+                type: "string",
+                description: "组件需求描述",
+              },
+              componentType: {
+                type: "string",
+                description: "组件类型（可选）",
+              },
+              llmConfig: {
+                type: "object",
+                description: "LLM 配置（可选）",
+              },
+            },
+            required: ["description"],
+          },
+        },
+      ],
+    };
+  }
+
+  /**
+   * 处理 prompts/list 请求
+   */
+  private async handleListPrompts(params: any): Promise<any> {
+    return {
+      prompts: [
+        {
+          name: "element-plus-component-generation",
+          description: "用于生成 Element Plus 组件的提示模板",
+          arguments: [
+            {
+              name: "description",
+              description: "组件需求描述",
+              required: true,
+            },
+            {
+              name: "componentType",
+              description: "组件类型",
+              required: false,
+            },
+          ],
+        },
+      ],
     };
   }
 

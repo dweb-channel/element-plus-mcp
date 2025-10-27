@@ -1,4 +1,5 @@
 import { LLMConfig } from './llmService';
+import { generateComponent } from './componentFilter';
 import { GenerateComponentTool } from '../tools/generate-component-tool.js';
 
 /**
@@ -41,34 +42,14 @@ export class MCPAdapter {
         fullDescription += `\n功能要求：${params.featuresRequired.join('、')}`;
       }
 
-      // 调用新的 GenerateComponentTool
-      const result = await this.generateTool.execute({
-        description: fullDescription,
-        componentType: params.componentType,
-        llmConfig: params.llmConfig,
-      });
-
-      // 从 MCP 格式提取数据
-      const textContent = result.content.find(c => c.type === 'text');
-      if (!textContent || textContent.type !== 'text') {
-        throw new Error('工具返回格式错误');
-      }
-
-      // 解析返回的文本内容
-      // GenerateComponentTool 返回的是 Markdown 格式的文本
-      // 我们需要从中提取组件信息
-      const text = textContent.text;
-      
-      // 简单的正则提取（根据 GenerateComponentTool 的返回格式）
-      const componentMatch = text.match(/## ✅ 生成组件: (.+)/);
-      const reasonMatch = text.match(/\*\*选择原因\*\*: (.+)/);
-      const codeMatch = text.match(/```vue\n([\s\S]+?)\n```/);
+      // 直接调用 componentFilter（包含按钮检测逻辑）
+      const { component, reason, rawCode } = await generateComponent(fullDescription, params.llmConfig);
 
       return {
-        componentName: componentMatch?.[1] || 'unknown',
-        code: codeMatch?.[1] || '',
+        componentName: component,
+        code: rawCode,
         previewUrl: 'http://localhost:3000/api/preview/get/0',
-        explanation: reasonMatch?.[1] || '组件生成成功',
+        explanation: reason,
       };
     } catch (error) {
       console.error('组件生成失败:', error);
