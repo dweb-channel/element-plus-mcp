@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "mcp": "node start-mcp.js",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

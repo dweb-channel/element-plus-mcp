@@ -1,11 +1,19 @@
 import { callLLM, LLMConfig } from './llmService';
 import { buildPrompt } from '../utils/promptBuilder';
+import { CacheService } from './cacheService';
 
 interface LLMComponentResponse {
   component: string;
   reason: string;
   code: string;
 }
+
+// 创建专用的组件生成缓存实例
+const componentGenerationCache = new CacheService<{
+  component: string;
+  reason: string;
+  rawCode: string;
+}>(100, 3600000); // 缓存100个结果，1小时过期
 
 /**
  * 生成组件
@@ -14,6 +22,15 @@ interface LLMComponentResponse {
  * @returns 返回组件信息、原因和代码
  */
 export async function generateComponent(userPrompt: string, llmConfig?: Partial<LLMConfig>) {
+  // 生成缓存键
+  const cacheKey = CacheService.generateKey({ userPrompt, llmConfig });
+  
+  // 尝试从缓存获取
+  const cached = componentGenerationCache.get(cacheKey);
+  if (cached) {
+    console.log('从缓存中获取组件生成结果');
+    return cached;
+  }
 
   const prompt = buildPrompt(userPrompt);
   const response = await callLLM(prompt, llmConfig);
@@ -28,11 +45,14 @@ export async function generateComponent(userPrompt: string, llmConfig?: Partial<
     }
     
     const { component, reason, code } = JSON.parse(jsonStr) as LLMComponentResponse;
-    return {
+    const result = {
       component,
       reason,
       rawCode: code,
     };
+    // 保存到缓存
+    componentGenerationCache.set(cacheKey, result);
+    return result;
   } catch (err) {
     // 尝试提取 JSON 部分
     try {
@@ -41,11 +61,14 @@ export async function generateComponent(userPrompt: string, llmConfig?: Partial<
       if (match) {
         const extractedJson = match[0];
         const { component, reason, code } = JSON.parse(extractedJson) as LLMComponentResponse;
-        return {
+        const result = {
           component,
           reason,
           rawCode: code,
         };
+        // 保存到缓存
+        componentGenerationCache.set(cacheKey, result);
+        return result;
       }
     } catch (extractErr) {
       // 提取失败，继续抛出原始错误

@@ -129,7 +129,7 @@ console.log(result);
 
 ```
 # DeepSeek（默认模型）
-DEEPSEEK_API_URL=https://api.deepseek.com
+DEEPSEEK_API_URL=https://api.deepseek.com/v1/chat/completions
 DEEPSEEK_API_KEY=your_deepseek_key
 
 # OpenAI

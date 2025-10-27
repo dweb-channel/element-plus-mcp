@@ -7,9 +7,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import path from "path";
 import fs from "fs";
 import { ServerResponse } from "http";
-import { generateComponent } from "./componentFilter";
-import { fixCode } from "./codeFixer";
-import { PreviewService } from "./previewService";
+import { GenerateComponentTool } from "../tools/generate-component-tool.js";
 
 /**
  * 初始化MCP服务器
@@ -18,16 +16,15 @@ import { PreviewService } from "./previewService";
 export function createMCPServer() {
   // 创建MCP服务器实例
   const server = new McpServer({
-    name: "Element Plus MCP Server",
+    name: "element-plus-mcp",
     version: "1.0.0",
-    description: "Element Plus组件生成服务",
   });
+
+  // 使用 BaseTool 模式注册工具
+  new GenerateComponentTool().register(server);
 
   // 注册Element Plus组件资源
   registerElementPlusComponentsResource(server);
-
-  // 注册组件生成工具
-  registerComponentGenerationTool(server);
 
   // 注册自定义提示模板
   registerCustomPrompts(server);
@@ -40,7 +37,7 @@ export function createMCPServer() {
  * 用于HTTP流式通信
  */
 export function createSSETransport(endpoint: string, res: ServerResponse) {
-  return new SSEServerTransport(endpoint,res);
+  return new SSEServerTransport(endpoint, res);
 }
 
 /**
@@ -229,80 +226,8 @@ function registerElementPlusComponentsResource(server: McpServer) {
   );
 }
 
-/**
- * 注册组件生成工具
- * 提供组件生成功能作为MCP工具
- */
-function registerComponentGenerationTool(server: McpServer) {
-  // 注册组件生成工具
-  // API格式：server.tool(name, description, paramSchema, callback)
-  server.tool(
-    "generate-component",
-    "根据描述生成Element Plus组件",
-    {
-      description: z.string().describe("组件需求描述"),
-      componentType: z
-        .string()
-        .optional()
-        .describe("组件类型（如表格、表单等）"),
-      stylePreference: z.string().optional().describe("样式偏好"),
-      featuresRequired: z.array(z.string()).optional().describe("所需功能列表"),
-    },
-    async ({
-      description,
-      componentType,
-      stylePreference,
-      featuresRequired,
-    }) => {
-      try {
-
-        // 创建提示信息
-        let prompt = description;
-
-        // 添加额外信息到提示中
-        if (componentType) {
-          prompt += `\n组件类型: ${componentType}`;
-        }
-
-        if (stylePreference) {
-          prompt += `\n样式偏好: ${stylePreference}`;
-        }
-
-        if (featuresRequired && featuresRequired.length > 0) {
-          prompt += `\n所需功能: ${featuresRequired.join(", ")}`;
-        }
-
-        // 调用组件生成服务
-        const { component, reason, rawCode } = await generateComponent(prompt);
-        const fixedCode = fixCode(rawCode);
-        const previewUrl = await  PreviewService.instance.buildPreview(fixedCode);
-
-        const result = {
-          componentName: component,
-          code: fixedCode,
-          previewUrl,
-          explanation: reason,
-        };
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
-      } catch (error) {
-        console.error("组件生成失败:", error);
-        throw new Error(
-          `组件生成失败: ${
-            error instanceof Error ? error.message : String(error)
-          }`
-        );
-      }
-    }
-  );
-}
+// 旧的 registerComponentGenerationTool 函数已删除
+// 现在使用 GenerateComponentTool 类（BaseTool 模式）
 
 /**
  * 注册自定义提示模板

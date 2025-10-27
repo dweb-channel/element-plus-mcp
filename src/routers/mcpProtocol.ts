@@ -205,8 +205,8 @@ router.post("/use-prompt-template", async (ctx: ParameterizedContext) => {
       if (featuresStr) {
         const features = featuresStr
           .split(",")
-          .map((f) => f.trim())
-          .filter((f) => f);
+          .map((f: string) => f.trim())
+          .filter((f: string) => f);
         if (features.length > 0) {
           promptText += `\n\n必需功能:\n`;
           for (const feature of features) {
