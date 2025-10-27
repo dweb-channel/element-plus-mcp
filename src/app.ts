@@ -15,9 +15,9 @@ export function createServer() {
     try {
       await next();
     } catch (err) {
-      ctx.status = err.status || 500;
+      ctx.status = (err as any).status || 500;
       ctx.body = {
-        message: err.message || "Internal Server Error",
+        message: (err as any).message || "Internal Server Error",
       };
       ctx.app.emit("error", err, ctx);
     }
@@ -26,7 +26,11 @@ export function createServer() {
   // 注册MCP API路由
   router.use("/api/mcp", mcpRoutes.routes(), mcpRoutes.allowedMethods());
   // 注册预览路由
-  router.use("/api/preview", previewRoutes.routes(), previewRoutes.allowedMethods());
+  router.use(
+    "/api/preview",
+    previewRoutes.routes(),
+    previewRoutes.allowedMethods()
+  );
   // 注册MCP协议路由
   router.use(
     "/api/mcp-protocol",

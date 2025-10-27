@@ -26,35 +26,6 @@ export async function generateComponent(
   llmConfig?: Partial<LLMConfig>
 ) {
   console.log("🎯 generateComponent 被调用，输入:", userPrompt);
-
-  // 临时测试：如果包含"按钮"关键词，直接返回 ElButton
-  if (
-    userPrompt.includes("按钮") ||
-    userPrompt.includes("button") ||
-    userPrompt.includes("ElButton")
-  ) {
-    console.log("🎯 检测到按钮关键词，返回 ElButton 组件");
-    return {
-      component: "ElButton",
-      reason: "用户需要按钮组件，ElButton 是最适合的选择",
-      rawCode: `<template>
-  <el-button type="primary" @click="handleClick">
-    测试按钮
-  </el-button>
-</template>
-
-<script setup>
-import { ElMessage } from 'element-plus'
-
-const handleClick = () => {
-  ElMessage.success('按钮被点击了！')
-}
-</script>`,
-    };
-  }
-
-  console.log("🤖 未检测到按钮关键词，继续正常流程");
-
   // 生成缓存键
   const cacheKey = CacheService.generateKey({ userPrompt, llmConfig });
   console.log("🔍 Cache key:", cacheKey);

@@ -158,17 +158,17 @@
         "required": false
       },
       {
-        "name": "inline",
-        "type": "boolean",
-        "description": "是否行内表单",
-        "default": "false",
+        "name": "label-width",
+        "type": "string | number",
+        "description": "标签宽度",
+        "default": "auto",
         "required": false
       },
       {
-        "name": "label-position",
-        "type": "string",
-        "description": "表单域标签的位置",
-        "default": "right",
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用该表单内的所有组件",
+        "default": "false",
         "required": false
       }
     ],
@@ -180,17 +180,17 @@
           {
             "name": "prop",
             "type": "string",
-            "description": "被校验的表单项名称"
+            "description": "被校验的表单项 prop"
           },
           {
-            "name": "valid",
+            "name": "isValid",
             "type": "boolean",
-            "description": "校验是否通过"
+            "description": "是否校验通过"
           },
           {
             "name": "message",
             "type": "string",
-            "description": "校验错误信息"
+            "description": "校验信息"
           }
         ]
       }
@@ -199,6 +199,553 @@
       {
         "name": "default",
         "description": "表单项内容"
+      }
+    ]
+  },
+  {
+    "name": "ElFormItem",
+    "description": "表单项组件，用于表单字段的布局和验证",
+    "category": "表单组件",
+    "props": [
+      {
+        "name": "prop",
+        "type": "string",
+        "description": "表单域 model 字段",
+        "required": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "标签文本",
+        "required": false
+      },
+      {
+        "name": "label-width",
+        "type": "string | number",
+        "description": "标签宽度",
+        "required": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "是否必填",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "表单控件内容"
+      },
+      {
+        "name": "label",
+        "description": "标签内容"
+      },
+      {
+        "name": "error",
+        "description": "自定义错误信息"
+      }
+    ]
+  },
+  {
+    "name": "ElCheckbox",
+    "description": "复选框组件",
+    "category": "表单组件",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "boolean | array",
+        "description": "绑定值",
+        "required": false
+      },
+      {
+        "name": "label",
+        "type": "string | number | boolean",
+        "description": "选中状态的值",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "description": "当绑定值变化时触发的事件",
+        "params": [
+          {
+            "name": "value",
+            "type": "boolean | array",
+            "description": "选中的值"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ElRadio",
+    "description": "单选框组件",
+    "category": "表单组件",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "string | number | boolean",
+        "description": "绑定值",
+        "required": false
+      },
+      {
+        "name": "label",
+        "type": "string | number | boolean",
+        "description": "单选框的值",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "description": "绑定值变化时触发的事件",
+        "params": [
+          {
+            "name": "value",
+            "type": "string | number | boolean",
+            "description": "选中的值"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ElSwitch",
+    "description": "开关组件",
+    "category": "表单组件",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "boolean | string | number",
+        "description": "绑定值",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "active-text",
+        "type": "string",
+        "description": "开关打开时的文字描述",
+        "required": false
+      },
+      {
+        "name": "inactive-text",
+        "type": "string",
+        "description": "开关关闭时的文字描述",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "description": "switch 状态发生变化时的回调函数",
+        "params": [
+          {
+            "name": "value",
+            "type": "boolean | string | number",
+            "description": "开关的状态值"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ElDialog",
+    "description": "对话框组件",
+    "category": "反馈组件",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "boolean",
+        "description": "是否显示 Dialog",
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "description": "Dialog 的标题",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "description": "Dialog 的宽度",
+        "default": "50%",
+        "required": false
+      },
+      {
+        "name": "before-close",
+        "type": "function",
+        "description": "关闭前的回调，会暂停 Dialog 的关闭",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "open",
+        "description": "Dialog 打开的回调"
+      },
+      {
+        "name": "opened",
+        "description": "Dialog 打开动画结束时的回调"
+      },
+      {
+        "name": "close",
+        "description": "Dialog 关闭的回调"
+      },
+      {
+        "name": "closed",
+        "description": "Dialog 关闭动画结束时的回调"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "Dialog 的内容"
+      },
+      {
+        "name": "header",
+        "description": "Dialog 标题区的内容"
+      },
+      {
+        "name": "footer",
+        "description": "Dialog 按钮操作区的内容"
+      }
+    ]
+  },
+  {
+    "name": "ElDrawer",
+    "description": "抽屉组件",
+    "category": "反馈组件",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "boolean",
+        "description": "是否显示 Drawer",
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "description": "Drawer 的标题",
+        "required": false
+      },
+      {
+        "name": "direction",
+        "type": "string",
+        "description": "Drawer 打开的方向",
+        "default": "rtl",
+        "required": false
+      },
+      {
+        "name": "size",
+        "type": "string | number",
+        "description": "Drawer 的大小",
+        "default": "30%",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "open",
+        "description": "Drawer 打开的回调"
+      },
+      {
+        "name": "opened",
+        "description": "Drawer 打开动画结束时的回调"
+      },
+      {
+        "name": "close",
+        "description": "Drawer 关闭的回调"
+      },
+      {
+        "name": "closed",
+        "description": "Drawer 关闭动画结束时的回调"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "Drawer 的内容"
+      },
+      {
+        "name": "header",
+        "description": "Drawer 标题区的内容"
+      },
+      {
+        "name": "footer",
+        "description": "Drawer 按钮操作区的内容"
+      }
+    ]
+  },
+  {
+    "name": "ElMessage",
+    "description": "消息提示函数，用于显示全局消息",
+    "category": "反馈组件",
+    "props": [
+      {
+        "name": "message",
+        "type": "string | VNode",
+        "description": "消息文字",
+        "required": true
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "description": "消息类型",
+        "default": "info",
+        "required": false
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "description": "显示时间，单位为毫秒",
+        "default": "3000",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "ElNotification",
+    "description": "通知提醒组件",
+    "category": "反馈组件",
+    "props": [
+      {
+        "name": "title",
+        "type": "string",
+        "description": "通知标题",
+        "required": false
+      },
+      {
+        "name": "message",
+        "type": "string | VNode",
+        "description": "通知消息",
+        "required": false
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "description": "通知类型",
+        "default": "info",
+        "required": false
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "description": "显示时间，单位为毫秒",
+        "default": "4500",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "ElPagination",
+    "description": "分页组件",
+    "category": "数据展示",
+    "props": [
+      {
+        "name": "total",
+        "type": "number",
+        "description": "总条目数",
+        "required": false
+      },
+      {
+        "name": "page-size",
+        "type": "number",
+        "description": "每页显示条目个数",
+        "default": "10",
+        "required": false
+      },
+      {
+        "name": "current-page",
+        "type": "number",
+        "description": "当前页数",
+        "default": "1",
+        "required": false
+      },
+      {
+        "name": "layout",
+        "type": "string",
+        "description": "组件布局",
+        "default": "prev, pager, next, jumper, ->, total",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "current-change",
+        "description": "current-page 改变时触发",
+        "params": [
+          {
+            "name": "currentPage",
+            "type": "number",
+            "description": "当前页"
+          }
+        ]
+      },
+      {
+        "name": "size-change",
+        "description": "page-size 改变时触发",
+        "params": [
+          {
+            "name": "pageSize",
+            "type": "number",
+            "description": "每页条数"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ElTabs",
+    "description": "标签页组件",
+    "category": "导航组件",
+    "props": [
+      {
+        "name": "modelValue / v-model",
+        "type": "string | number",
+        "description": "绑定值，选中选项卡的 name",
+        "required": false
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "description": "风格类型",
+        "default": "border-card",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "tab-click",
+        "description": "tab 被选中时触发",
+        "params": [
+          {
+            "name": "pane",
+            "type": "object",
+            "description": "被选中的标签 tab 实例"
+          },
+          {
+            "name": "event",
+            "type": "Event",
+            "description": "事件对象"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "标签页内容"
+      }
+    ]
+  },
+  {
+    "name": "ElTabPane",
+    "description": "标签页内容组件",
+    "category": "导航组件",
+    "props": [
+      {
+        "name": "name",
+        "type": "string | number",
+        "description": "与选项卡绑定值 value 对应的标识符",
+        "required": true
+      },
+      {
+        "name": "label",
+        "type": "string | number",
+        "description": "选项卡标题",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "是否禁用",
+        "default": "false",
+        "required": false
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "标签页内容"
+      },
+      {
+        "name": "label",
+        "description": "标签页标题"
+      }
+    ]
+  },
+  {
+    "name": "ElMenu",
+    "description": "菜单组件",
+    "category": "导航组件",
+    "props": [
+      {
+        "name": "mode",
+        "type": "string",
+        "description": "菜单显示模式",
+        "default": "vertical",
+        "required": false
+      },
+      {
+        "name": "collapse",
+        "type": "boolean",
+        "description": "是否水平折叠收起菜单",
+        "default": "false",
+        "required": false
+      },
+      {
+        "name": "default-active",
+        "type": "string",
+        "description": "当前激活菜单的 index",
+        "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "select",
+        "description": "菜单激活回调",
+        "params": [
+          {
+            "name": "index",
+            "type": "string",
+            "description": "选中菜单项的 index"
+          },
+          {
+            "name": "indexPath",
+            "type": "string[]",
+            "description": "选中菜单项的 index path"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "菜单内容"
       }
     ]
   },
@@ -230,6 +777,12 @@
         "name": "accept",
         "type": "string",
         "description": "接受上传的文件类型",
+        "required": false
+      },
+      {
+        "name": "file-list",
+        "type": "array",
+        "description": "上传的文件列表",
         "required": false
       }
     ],
@@ -279,116 +832,107 @@
     ]
   },
   {
-    "name": "ElSelect",
-    "description": "下拉选择组件",
-    "category": "数据录入",
+    "name": "ElCard",
+    "description": "卡片组件",
+    "category": "布局组件",
     "props": [
       {
-        "name": "modelValue / v-model",
-        "type": "any",
-        "description": "选中项绑定值",
-        "required": true
-      },
-      {
-        "name": "multiple",
-        "type": "boolean",
-        "description": "是否多选",
-        "default": "false",
+        "name": "header",
+        "type": "string",
+        "description": "卡片标题",
         "required": false
       },
       {
-        "name": "disabled",
-        "type": "boolean",
-        "description": "是否禁用",
-        "default": "false",
+        "name": "shadow",
+        "type": "string",
+        "description": "卡片阴影",
+        "default": "always",
         "required": false
-      },
-      {
-        "name": "clearable",
-        "type": "boolean",
-        "description": "是否可以清空选项",
-        "default": "false",
-        "required": false
-      }
-    ],
-    "events": [
-      {
-        "name": "change",
-        "description": "选中值发生变化时触发",
-        "params": [
-          {
-            "name": "value",
-            "type": "any",
-            "description": "目前的选中值"
-          }
-        ]
       }
     ],
     "slots": [
       {
         "name": "default",
-        "description": "Option组件列表"
+        "description": "卡片内容"
       },
       {
-        "name": "prefix",
-        "description": "Select 组件头部内容"
-      },
-      {
-        "name": "empty",
-        "description": "无选项时的列表"
+        "name": "header",
+        "description": "卡片标题"
       }
     ]
   },
   {
-    "name": "ElTable",
-    "description": "表格组件，用于展示多条结构类似的数据",
-    "category": "数据展示",
+    "name": "ElRow",
+    "description": "行布局组件",
+    "category": "布局组件",
     "props": [
       {
-        "name": "data",
-        "type": "array",
-        "description": "显示的数据",
-        "required": true
-      },
-      {
-        "name": "stripe",
-        "type": "boolean",
-        "description": "是否为斑马纹表格",
-        "default": "false",
+        "name": "gutter",
+        "type": "number",
+        "description": "栅格间隔",
+        "default": "0",
         "required": false
       },
       {
-        "name": "border",
-        "type": "boolean",
-        "description": "是否带有纵向边框",
-        "default": "false",
-        "required": false
-      },
-      {
-        "name": "size",
+        "name": "justify",
         "type": "string",
-        "description": "表格大小",
-        "default": "large",
+        "description": "flex 布局下的水平排列方式",
+        "default": "start",
         "required": false
-      }
-    ],
-    "events": [
+      },
       {
-        "name": "selection-change",
-        "description": "当选择项发生变化时触发",
-        "params": [
-          {
-            "name": "selection",
-            "type": "array",
-            "description": "已选择的行数据"
-          }
-        ]
+        "name": "align",
+        "type": "string",
+        "description": "flex 布局下的垂直排列方式",
+        "default": "top",
+        "required": false
       }
     ],
     "slots": [
       {
         "name": "default",
-        "description": "表格列的定义"
+        "description": "行内容"
+      }
+    ]
+  },
+  {
+    "name": "ElCol",
+    "description": "列布局组件",
+    "category": "布局组件",
+    "props": [
+      {
+        "name": "span",
+        "type": "number",
+        "description": "栅格占据的列数",
+        "default": "24",
+        "required": false
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "栅格左侧的间隔格数",
+        "default": "0",
+        "required": false
+      },
+      {
+        "name": "push",
+        "type": "number",
+        "description": "栅格向右移动格数",
+        "default": "0",
+        "required": false
+      },
+      {
+        "name": "pull",
+        "type": "number",
+        "description": "栅格向左移动格数",
+        "default": "0",
+        "required": false
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "description": "列内容"
       }
     ]
   }

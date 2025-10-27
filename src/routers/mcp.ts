@@ -57,7 +57,7 @@ router.post("/generate", async (ctx: ParameterizedContext) => {
     ctx.status = 500;
     ctx.body = {
       message: "MCP生成失败",
-      error: error.message,
+      error: error,
     };
   }
 });
@@ -110,7 +110,7 @@ router.get("/models", async (ctx: ParameterizedContext) => {
     ctx.status = 500;
     ctx.body = {
       message: "获取模型信息失败",
-      error: error.message,
+      error: error,
     };
   }
 });
@@ -148,7 +148,7 @@ router.post("/test-model", async (ctx: ParameterizedContext) => {
     ctx.body = {
       success: false,
       message: "模型连接测试失败",
-      error: error.message,
+      error: error,
     };
   }
 });
