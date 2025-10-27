@@ -315,7 +315,7 @@ export class MCPHttpHandler {
    * 处理callTool请求
    */
   private async handleCallTool(params: any): Promise<any> {
-    const { name, args } = params;
+    const { name, arguments: args } = params;
     if (!name) {
       throw new Error("缺少必要的工具名称");
     }
@@ -332,9 +332,17 @@ export class MCPHttpHandler {
    * 调用生成组件工具
    */
   private async callGenerateComponentTool(args: any): Promise<any> {
+    console.log("🔧 callGenerateComponentTool 被调用，原始args:", args);
     try {
       const { description, componentType, stylePreference, featuresRequired } =
         args || {};
+      console.log("📋 解析后的参数:", {
+        description,
+        componentType,
+        stylePreference,
+        featuresRequired,
+      });
+
       const promptParts = [
         description,
         componentType && `类型：${componentType}`,
@@ -343,6 +351,8 @@ export class MCPHttpHandler {
       ].filter(Boolean);
 
       const prompt = promptParts.join("，");
+      console.log("📝 构建的prompt:", prompt);
+
       const { component, reason, rawCode } = await generateComponent(prompt);
       const fixedCode = fixCode(rawCode);
       const previewUrl = await PreviewService.instance.buildPreview(fixedCode);
@@ -377,7 +387,7 @@ export class MCPHttpHandler {
    * 处理getPrompt请求
    */
   private async handleGetPrompt(params: any): Promise<any> {
-    const { name, args } = params;
+    const { name, arguments: args } = params;
     if (!name) {
       throw new Error("缺少必要的提示模板名称");
     }
