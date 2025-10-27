@@ -84,52 +84,6 @@ function registerElementPlusComponentsResource(server: McpServer) {
     }
   );
 
-  // 定义组件模式
-  const componentSchema = z.object({
-    name: z.string().describe("组件名称"),
-    description: z.string().describe("组件描述"),
-    category: z.string().describe("组件分类"),
-    props: z
-      .array(
-        z.object({
-          name: z.string().describe("属性名称"),
-          type: z.string().describe("属性类型"),
-          description: z.string().describe("属性描述"),
-          default: z.string().optional().describe("默认值"),
-          required: z.boolean().optional().describe("是否必需"),
-        })
-      )
-      .describe("组件属性"),
-    events: z
-      .array(
-        z.object({
-          name: z.string().describe("事件名称"),
-          description: z.string().describe("事件描述"),
-          params: z
-            .array(
-              z.object({
-                name: z.string().describe("参数名称"),
-                type: z.string().describe("参数类型"),
-                description: z.string().describe("参数描述"),
-              })
-            )
-            .optional()
-            .describe("事件参数"),
-        })
-      )
-      .optional()
-      .describe("组件事件"),
-    slots: z
-      .array(
-        z.object({
-          name: z.string().describe("插槽名称"),
-          description: z.string().describe("插槽描述"),
-        })
-      )
-      .optional()
-      .describe("组件插槽"),
-  });
-
   // 注册组件资源
   server.resource(
     "element-plus-components", // 资源名称
@@ -226,9 +180,6 @@ function registerElementPlusComponentsResource(server: McpServer) {
   );
 }
 
-// 旧的 registerComponentGenerationTool 函数已删除
-// 现在使用 GenerateComponentTool 类（BaseTool 模式）
-
 /**
  * 注册自定义提示模板
  * 提供Element Plus组件生成的提示模板
@@ -283,7 +234,6 @@ function registerCustomPrompts(server: McpServer) {
       promptText += `\n请使用Element Plus组件库，生成完整的Vue SFC组件代码，包括<template>、<script setup>和<style>部分。
 组件应该遵安Vue3的最佳实践，使用组合式API，并且确保代码简洁、高效且易于理解。\n\n请确保:\n1. 导入所有必需的Element Plus组件\n2. 正确处理组件的props和事件\n3. 添加必要的注释和类型定义\n4. 代码应该是完整的、可运行的`;
 
-      // 按照MCP SDK要求，返回格式为包含messages数组的对象
       return {
         messages: [
           {

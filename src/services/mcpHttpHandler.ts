@@ -99,7 +99,7 @@ export class MCPHttpHandler {
 
       // 处理单个请求
       const response = await this.processSingleRequest(jsonBody);
-      res.statusCode = 200
+      res.statusCode = 200;
       res.end(JSON.stringify(response));
     } catch (error) {
       console.error("处理MCP请求错误:", error);
